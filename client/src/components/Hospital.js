@@ -77,38 +77,37 @@ const Hospital = () => {
 
     const bookbed = (e) => {
 
-        //    alert(varname)
-        //    alert(varname2)
-        //    alert(varname3)
-
-        //     axios.post('http://127.0.0.1:3001/data7', {name:varname,bedtype:varname3,hos:varname2}).then(() => {
-        //         alert("Accepted");
-        //     }).catch((err) => {
-        //         alert(err);
-        //     })
-
         axios({
             url: 'http://127.0.0.1:3001/data6',
         }).then((response) => {
-            const data=response.data;
-            const div=document.getElementById('div');
-            alert(div.innerHTML)
-            alert(JSON.stringify(data.find(obj => obj.Bed_Type=== "ICU"))) ;
+            const data = response.data;
+            const newdiv = e.target.parentElement;
+            const children = newdiv.children;
 
-            setacceptrequest(response.data);
+            const patientname=children[1].children;
+            const hospitalname=children[2].children;
+            const bedname=children[3].children;
+
+
+            const patientnamenew=patientname[0].innerText;
+            const hospitalnamenew=hospitalname[0].innerText;
+            const bednamenew=bedname[0].innerText;
+
+          axios.post("http://127.0.0.1:3001/data7",{name:patientnamenew , bedtype:bednamenew ,hos:hospitalnamenew}).then(()=>{
+          alert("Accepted");
+          }).catch((err)=>{
+            alert("Error In Request"+err);
+          })
+
+
         }).catch((err) => {
             alert(err)
         })
-
-
     }
 
     let varname;
     let varname2;
     let varname3;
-    let varname4;
-    let varname5;
-    let varname6;
 
 
     return (
@@ -154,33 +153,18 @@ const Hospital = () => {
 
                 <button onClick={getallrequests}>See Request</button>
 
-
-
-                {/* {acceptrequest.map((val) => {
-                  varname4=`${val.Patient_name}`
-                  alert(varname4)
-                })
-                } */}
-
-
-
-                {requests.map((val) => {
-
-                    varname = `${val.Patient_name}`
-                    varname2 = `${val.Hospital_name}`
-                    varname3 = `${val.Bed_Type}`
-
+                {requests.map((val, key) => {
                     return (
                         <>
                             <br />
                             <br />
-                            <div style={{ border: '3px solid red', justifyContent: 'center' }} id='div' >
+                            <div style={{ border: '3px solid red', justifyContent: 'center' }}  >
                                 <h5>Request 01: </h5>
-                                <h2 id='patientname'>Patient_Name:{val.Patient_name}</h2>
-                                <h4 id='hosname'>Hospital_Name:{val.Hospital_name}</h4>
-                                <h5 id='bedtype'>Bed_Type: {val.Bed_Type}</h5>
+                                <h2 id='patientname'>Patient_Name:<span>{val.Patient_name}</span></h2>
+                                <h4 id='hosname'>Hospital_Name:<span>{val.Hospital_name}</span></h4>
+                                <h5 id='bedtype'>Bed_Type: <span>{val.Bed_Type}</span></h5>
                                 <br />
-                                <button onClick={bookbed}>Accept Request</button>
+                                <button id={key} onClick={bookbed}>Accept Request</button>
                             </div>
                         </>
                     );

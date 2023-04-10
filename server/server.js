@@ -17,6 +17,24 @@ const db = mysql.createPool({
 })
 
 
+app.get('/gethospitals', (req, res) => {
+
+    const hosquery = "SELECT * from hospitals";
+
+    db.query(hosquery, (err, result) => {
+        if (err) {
+            res.send("Error in connection");
+        } else {
+            res.send(result);
+        }
+    })
+
+
+})
+
+
+
+
 app.get('/data', (req, res) => {
 
     const getbeds = "SELECT * FROM BEDS";
@@ -110,11 +128,6 @@ app.post('/data5', (req, res) => {
             res.send("Error in connection");
         } else {
             res.send(result);
-            var newdata = JSON.stringify(requestobject)+",";
-            fs.appendFile("data.json", newdata, (err) => {
-                if (err) throw err;
-                alert("New data added");
-            });
         }
     })
 
